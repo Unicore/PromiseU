@@ -46,8 +46,11 @@ class PromiseTests: XCTestCase {
     let delay: Double = 2 // 2 sec
     
     func promise2sDelay(value: Int = 1) -> Promise<Int> {
+        
+        let ptq = DispatchQueue(label: "com.test.private-queue")
         return Promise<Int> { resolve in
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            ptq.asyncAfter(deadline: .now() + delay) {
+                print("-> + resolved \(value)")
                 resolve(value)
             }
         }
@@ -56,13 +59,10 @@ class PromiseTests: XCTestCase {
     // MARK: Await
     
     func testPromise_withDelayBeforeResolving_shouldAwaitAndReturnTheResult() {
-        let sut = Promise<Int> { resolve in
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                resolve(7)
-            }
-        }
+        let sut = promise2sDelay(value: 7)
         let result = sut.await()
         XCTAssertEqual(result, 7)
     }
 
+    
 }

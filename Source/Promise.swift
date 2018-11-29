@@ -56,12 +56,24 @@ public final class Promise<T>: PromiseType {
     /// - Parameter queue: queue to run a callback closure on, might be omitted
     /// - Returns: value
     public func await() -> Value {
+        
         let group = DispatchGroup()
         group.enter()
         
-        self.onComplete() { _ in group.leave() }
-        group.wait()
-        return self.value!        
+        if let value = self.value {
+            group.leave()
+            return value            
+        } else {
+            var result: Value?
+            self.callbacks.append({ value in
+                result = value
+                group.leave()
+            })
+            
+            group.wait()
+            return result!
+        }
+        
     }
     
     public init(on queue: DispatchQueue? = nil, _ value: T) {
@@ -79,6 +91,7 @@ public final class Promise<T>: PromiseType {
             }
         }
     }
+
 }
 
 extension PromiseType {
