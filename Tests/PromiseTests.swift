@@ -74,28 +74,7 @@ class PromiseTests: XCTestCase {
         ptq.async {
             let result = sut.await()
             XCTAssertEqual(result, 7)
-        }
-        
+        }        
     }
     
-    func testPromise_resultOnTheSameQueueAsAwait_shouldAwaitAndReturnTheResult() {
-        let ptq = DispatchQueue(label: "com.test.private-queue")
-
-        let exp = expectation(description: "Deadlock should not happened")
-        
-        let sut = Promise<Int>() { resolve in
-            ptq.asyncAfter(deadline: .now() + delay) {
-                resolve(7)
-            }
-        }
-        
-        ptq.async {
-            let result = sut.await()
-            XCTAssertEqual(result, 7)
-            exp.fulfill()
-        }
-        
-        
-        wait(for: [exp], timeout: 3)
-    }
 }
