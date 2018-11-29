@@ -59,21 +59,19 @@ public final class Promise<T>: PromiseType {
     public func await() -> Value {
         let group = DispatchGroup()
         group.enter()
-        
-        if let value = self.queue.sync(execute: { return self.value }) {
-            group.leave()
-            return value
-        } else {
-            
-            
-            var result: Value?
-            self.callbacks.append({ value in
-                result = value
+        return waitingQueue.sync {
+            if let value = self.value {
                 group.leave()
-            })
-            
-            // Deadlock protection, in case if we on a queue where result is going to arrive
-            return waitingQueue.sync {
+                return value
+            } else {
+                var result: Value?
+                self.callbacks.append({ value in
+                    result = value
+                    group.leave()
+                })
+                
+                // Deadlock protection, in case if we on a queue where result is going to arrive
+                
                 group.wait()
                 return result!
             }
