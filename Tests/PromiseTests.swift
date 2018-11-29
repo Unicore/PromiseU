@@ -15,14 +15,14 @@ class PromiseTests: XCTestCase {
     func testPromise_withDelayBeforeResolving_shouldCallOnCompleteAfterDelay() {
         let exp = expectation(description: "resolved promise")
         let sut = promise2sDelay()
-        sut.onComplete { exp.fulfill() }
+        sut.onComplete { _ in exp.fulfill() }
         wait(for: [exp], timeout: delay + maxDeviation)
     }
 
     func testPromise_F1_thenF2_BothWithSameDelayBeforeResolving_shouldCallOnCompleteAfterDelayX2() {
         let exp = expectation(description: "resolved promise")
         let sut = promise2sDelay().then(promise2sDelay)
-        sut.onComplete {
+        sut.onComplete {_ in 
             exp.fulfill()
         }
         wait(for: [exp], timeout: delay * 2 + maxDeviation)
@@ -44,11 +44,25 @@ class PromiseTests: XCTestCase {
     // MARK: - Utils
     let maxDeviation: Double = 0.15
     let delay: Double = 2 // 2 sec
-    func promise2sDelay() -> Promise<Void> {
-        return Promise<Void> { resolve in
+    
+    func promise2sDelay(value: Int = 1) -> Promise<Int> {
+        return Promise<Int> { resolve in
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                resolve(())
+                resolve(value)
             }
         }
     }
+    
+    // MARK: Await
+    
+    func testPromise_withDelayBeforeResolving_shouldAwaitAndReturnTheResult() {
+        let sut = Promise<Int> { resolve in
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                resolve(7)
+            }
+        }
+        let result = sut.await()
+        XCTAssertEqual(result, 7)
+    }
+
 }

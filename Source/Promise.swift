@@ -51,6 +51,19 @@ public final class Promise<T>: PromiseType {
         }
     }
     
+    /// Runs the operation and waits for it to finished and returns their result
+    ///
+    /// - Parameter queue: queue to run a callback closure on, might be omitted
+    /// - Returns: value
+    public func await() -> Value {
+        let group = DispatchGroup()
+        group.enter()
+        
+        self.onComplete() { _ in group.leave() }
+        group.wait()
+        return self.value!        
+    }
+    
     public init(on queue: DispatchQueue? = nil, _ value: T) {
         self.queue = queue ?? DispatchQueue(label: "Promise<T> private queue (PromiseU)")
         self.value = value
