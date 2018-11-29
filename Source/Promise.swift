@@ -36,6 +36,7 @@ public final class Promise<T>: PromiseType {
     public typealias Value = T
     
     private let queue : DispatchQueue
+    private let waitingQueue = DispatchQueue(label: "Promise<T> private await queue (PromiseU)")
     
     private var value: T?
     private var callbacks: [(T) -> ()] = []
@@ -56,24 +57,27 @@ public final class Promise<T>: PromiseType {
     /// - Parameter queue: queue to run a callback closure on, might be omitted
     /// - Returns: value
     public func await() -> Value {
-        
         let group = DispatchGroup()
         group.enter()
         
-        if let value = self.value {
+        if let value = self.queue.sync(execute: { return self.value }) {
             group.leave()
-            return value            
+            return value
         } else {
+            
+            
             var result: Value?
             self.callbacks.append({ value in
                 result = value
                 group.leave()
             })
             
-            group.wait()
-            return result!
+            // Deadlock protection, in case if we on a queue where result is going to arrive
+            return waitingQueue.sync {
+                group.wait()
+                return result!
+            }
         }
-        
     }
     
     public init(on queue: DispatchQueue? = nil, _ value: T) {
@@ -91,7 +95,7 @@ public final class Promise<T>: PromiseType {
             }
         }
     }
-
+    
 }
 
 extension PromiseType {
