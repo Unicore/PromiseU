@@ -15,11 +15,18 @@ env:
   - TVOS_FRAMEWORK_SCHEME="PromiseU tvOS"
   - WATCHOS_FRAMEWORK_SCHEME="PromiseU watchOS"
   
-  matrix:
-      - 'OS=4.3,name=Apple Watch - 42mm':
-        - xcode_scheme: $WATCHOS_FRAMEWORK_SCHEME
-        - xcode_destination: "OS=4.3,name=Apple Watch - 42mm"
-      - "OS=11.3,name=iPhone X":
-        - xcode_scheme: "$IOS_FRAMEWORK_SCHEME"
-        - xcode_destination: "OS=11.3,name=iPhone X"
+matrix:
+  - 'watchOS 4.3':
+    - xcode_scheme: $WATCHOS_FRAMEWORK_SCHEME
+    - xcode_destination: "OS=4.3,name=Apple Watch - 42mm"
+      
+  - "iOS 12.0":
+    - xcode_scheme: "$IOS_FRAMEWORK_SCHEME"
+    - xcode_destination: "OS=11.3,name=iPhone X"
+  - "iOS 11.3":
+    - xcode_scheme: "$IOS_FRAMEWORK_SCHEME"
+    - xcode_destination: "OS=11.3,name=iPhone X"
+  - "iOS 10.3.1":
+    - xcode_scheme: "$IOS_FRAMEWORK_SCHEME"
+    - xcode_destination: "OS=10.3.1,name=iPhone 7 Plus"
  
