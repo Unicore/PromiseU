@@ -1,6 +1,7 @@
 os: osx
 language: swift
 osx_image: xcode10.1
+xcode_project: PromiseU.xcodeproj
 branches:
   only:
     - master
