@@ -161,7 +161,6 @@
 			children = (
 				CE825D6B2072206300D40EC9 /* Promise.swift */,
 				D0E702E52080ADB000778FED /* Promise+Collections.swift */,
-				CE825D6A2072206300D40EC9 /* Future */,
 				CE2D320C20721B6500C12E29 /* Support */,
 			);
 			path = Source;
@@ -173,7 +172,6 @@
 				D060FD9C2080A0230059A31C /* PromiseCollectionsTests.swift */,
 				D0E702E12080A71200778FED /* PromiseTests.swift */,
 				CE2D320B20721AFF00C12E29 /* Support */,
-				D060FDA02080A0380059A31C /* Future */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -197,13 +195,6 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
-		CE825D6A2072206300D40EC9 /* Future */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Future;
-			sourceTree = "<group>";
-		};
 		CEDFE009207225C600C0F011 /* Deployment */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,13 +203,6 @@
 				CEDFE00D207225EB00C0F011 /* README.md */,
 			);
 			name = Deployment;
-			sourceTree = "<group>";
-		};
-		D060FDA02080A0380059A31C /* Future */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Future;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
