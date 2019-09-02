@@ -20,7 +20,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-
+// swift-tools-version:4.2
+// The swift-tools-version declares the minimum version of Swift required to build this package.
 import PackageDescription
 
-let package = Package(name: "PromiseU", dependencies : [], exclude: ["Tests"])
+let package = Package(
+    name: "PromiseU",
+    products: [
+        .library(
+            name: "PromiseU",
+            targets: ["PromiseU"]),
+    ],
+    dependencies: [
+    ],
+    targets: [
+        .target(
+            name: "PromiseU",
+            dependencies: []),
+        .testTarget(
+            name: "Tests",
+            dependencies: ["PromiseU"]),
+    ]
+)
